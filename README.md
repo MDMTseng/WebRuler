@@ -91,7 +91,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Inspired by the need for quick and accurate on-screen measurements
 - Thanks to all contributors who have helped improve this tool
-
----
-
-Made with ❤️ by [Your Name] 
