@@ -91,3 +91,21 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Inspired by the need for quick and accurate on-screen measurements
 - Thanks to all contributors who have helped improve this tool
+
+## Mobile Compatibility
+
+WebRuler works on mobile devices with the following considerations:
+
+- **Touch Controls**: Tap and drag to create and adjust measurement lines
+- **Pinch to Zoom**: Use standard pinch gestures to zoom in/out for precise measurements
+- **Orientation Support**: Works in both portrait and landscape orientations
+- **Pull-to-Refresh Prevention**: The app prevents accidental page refreshes when dragging lines downward on iOS devices
+
+### Known Issues and Fixes
+
+- **iOS Pull-to-Refresh**: Fixed an issue where dragging horizontal lines downward would trigger the browser's pull-to-refresh action on iOS devices
+- **Mobile Calibration**: For best results on mobile, calibrate the screen using a physical ruler in both portrait and landscape modes
+
+---
+
+Made with ❤️ by [Your Name]

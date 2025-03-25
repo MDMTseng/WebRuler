@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import './App.css'
 import Ruler from './components/Ruler'
 import CalibrationModal from './components/CalibrationModal'
@@ -57,6 +57,24 @@ function App() {
   const handleReset = () => {
     setLines([]);
   };
+
+  // Add this useEffect to prevent pull-to-refresh on mobile devices
+  useEffect(() => {
+    const preventPullToRefresh = (e: TouchEvent) => {
+      // Prevent pull-to-refresh when interacting with the app
+      if (e.touches.length === 1) {
+        e.preventDefault();
+      }
+    };
+
+    // Add the event listener to the document
+    document.addEventListener('touchmove', preventPullToRefresh, { passive: false });
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      document.removeEventListener('touchmove', preventPullToRefresh);
+    };
+  }, []);
 
   return (
     <div className="app">

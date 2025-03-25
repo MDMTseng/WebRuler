@@ -44,12 +44,26 @@ const Ruler: React.FC<RulerProps> = ({ pixelsPerCm, onCreateLine }) => {
     onCreateLine(isVerticalRuler, position)
   }
   
+  // Add a touch event handler to prevent default behavior
+  const handleTouchEvent = (e: React.TouchEvent, isVerticalRuler: boolean) => {
+    e.preventDefault(); // Prevent default touch behavior
+    handleCreateLine(e, isVerticalRuler);
+  }
+
+  const handleClick = (e: React.MouseEvent, isVerticalRuler: boolean) => {
+    // Only handle mouse clicks, not touch events that trigger click
+    if (e.type === 'click' && e.nativeEvent instanceof MouseEvent) {
+      handleCreateLine(e, isVerticalRuler);
+    }
+  };
+
   return (
     <div className="ruler">
       <div 
         className="horizontal-ruler"
-        onClick={(e) => handleCreateLine(e, false)}
-        onTouchStart={(e) => handleCreateLine(e, false)}
+        onClick={(e) => handleClick(e, false)}
+        onTouchStart={(e) => handleTouchEvent(e, false)}
+        onTouchMove={(e) => e.preventDefault()} // Prevent pull-to-refresh
       >
         {Array.from({ length: horizontalLength * 10 + 1 }).map((_, index) => {
           const isCm = index % 10 === 0
@@ -71,8 +85,9 @@ const Ruler: React.FC<RulerProps> = ({ pixelsPerCm, onCreateLine }) => {
       
       <div 
         className="vertical-ruler"
-        onClick={(e) => handleCreateLine(e, true)}
-        onTouchStart={(e) => handleCreateLine(e, true)}
+        onClick={(e) => handleClick(e, true)}
+        onTouchStart={(e) => handleTouchEvent(e, true)}
+        onTouchMove={(e) => e.preventDefault()} // Prevent pull-to-refresh
       >
         {Array.from({ length: verticalLength * 10 + 1 }).map((_, index) => {
           const isCm = index % 10 === 0
