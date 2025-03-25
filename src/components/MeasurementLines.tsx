@@ -223,7 +223,7 @@ const MeasurementLines: React.FC<MeasurementLinesProps> = ({
       </div>
 
       {/* Measurements display in bottom right */}
-      {lines.length >= 2 && (
+      {false && lines.length >= 2 && (
         <div className={`measurements-display ${!showMeasurements ? 'minimized' : ''}`}>
           <div className="measurements-header">
             <h3>Measurements</h3>
