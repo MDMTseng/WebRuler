@@ -4,6 +4,10 @@
   position: relative;
   overflow: hidden;
   background: #f5f5f5;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* Top buttons container */
@@ -589,15 +593,39 @@
 
 /* Add styles for fullscreen mode */
 .app:-webkit-full-screen {
-  width: 100vw;
-  height: 100vh;
+  width: 100vw !important;
+  height: 100vh !important;
   background: #f5f5f5;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.app:-moz-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+  background: #f5f5f5;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.app:-ms-fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  background: #f5f5f5;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 .app:fullscreen {
-  width: 100vw;
-  height: 100vh;
+  width: 100vw !important;
+  height: 100vh !important;
   background: #f5f5f5;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 .current-calibration {
@@ -648,4 +676,25 @@
 
 .reset-button:hover {
   background: #c82333;
+}
+
+/* Ensure buttons are easily tappable on mobile */
+.top-buttons button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 16px;
+  margin: 4px;
+  font-size: 16px;
+  touch-action: manipulation;
+}
+
+@media (max-width: 768px) {
+  .top-buttons {
+    gap: 5px;
+  }
+  
+  .top-buttons button {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
 } 

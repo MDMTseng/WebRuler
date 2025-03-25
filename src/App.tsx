@@ -42,17 +42,74 @@ function App() {
 
   const toggleFullscreen = useCallback(async () => {
     try {
-      if (!document.fullscreenElement) {
-        await document.documentElement.requestFullscreen()
-        setIsFullscreen(true)
+      const elem = document.documentElement;
+      if (!document.fullscreenElement && 
+          !(document as any).webkitFullscreenElement && 
+          !(document as any).mozFullScreenElement &&
+          !(document as any).msFullscreenElement) {
+        // Request fullscreen with fallbacks
+        if (elem.requestFullscreen) {
+          await elem.requestFullscreen();
+        } else if ((elem as any).webkitRequestFullscreen) {
+          await (elem as any).webkitRequestFullscreen();
+        } else if ((elem as any).mozRequestFullScreen) {
+          await (elem as any).mozRequestFullScreen();
+        } else if ((elem as any).msRequestFullscreen) {
+          await (elem as any).msRequestFullscreen();
+        }
+        setIsFullscreen(true);
       } else {
-        await document.exitFullscreen()
-        setIsFullscreen(false)
+        // Exit fullscreen with fallbacks
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if ((document as any).webkitExitFullscreen) {
+          await (document as any).webkitExitFullscreen();
+        } else if ((document as any).mozCancelFullScreen) {
+          await (document as any).mozCancelFullScreen();
+        } else if ((document as any).msExitFullscreen) {
+          await (document as any).msExitFullscreen();
+        }
+        setIsFullscreen(false);
       }
     } catch (err) {
-      console.error('Error toggling fullscreen:', err)
+      console.error('Error toggling fullscreen:', err);
     }
-  }, [])
+  }, []);
+
+  // Add fullscreen change event listener
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(
+        !!(document.fullscreenElement ||
+          (document as any).webkitFullscreenElement ||
+          (document as any).mozFullScreenElement ||
+          (document as any).msFullscreenElement)
+      );
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+    };
+  }, []);
+
+  // Add meta viewport tag for better mobile support
+  useEffect(() => {
+    const viewport = document.querySelector('meta[name=viewport]');
+    if (!viewport) {
+      const meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+      document.head.appendChild(meta);
+    }
+  }, []);
 
   const handleReset = () => {
     setLines([]);
