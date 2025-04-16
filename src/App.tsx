@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import Ruler from './components/Ruler'
 import CalibrationModal from './components/CalibrationModal'
@@ -19,8 +19,7 @@ function App() {
   const [lines, setLines] = useState<Line[]>([])
   const [showInstructions, setShowInstructions] = useState(true)
   const [showMeasurements, setShowMeasurements] = useState(true) // Default to true since panel will be minimizable
-  const [isFullscreen, setIsFullscreen] = useState(false)
-  
+
   const handleCalibration = (newPixelsPerCm: number) => {
     setPixelsPerCm(newPixelsPerCm)
     localStorage.setItem('pixelsPerCm', newPixelsPerCm.toString())
@@ -39,66 +38,6 @@ function App() {
     setShowInstructions(false)
     setShowMeasurements(true) // Show measurements when creating first line
   }
-
-  const toggleFullscreen = useCallback(async () => {
-    try {
-      const elem = document.documentElement;
-      if (!document.fullscreenElement && 
-          !(document as any).webkitFullscreenElement && 
-          !(document as any).mozFullScreenElement &&
-          !(document as any).msFullscreenElement) {
-        // Request fullscreen with fallbacks
-        if (elem.requestFullscreen) {
-          await elem.requestFullscreen();
-        } else if ((elem as any).webkitRequestFullscreen) {
-          await (elem as any).webkitRequestFullscreen();
-        } else if ((elem as any).mozRequestFullScreen) {
-          await (elem as any).mozRequestFullScreen();
-        } else if ((elem as any).msRequestFullscreen) {
-          await (elem as any).msRequestFullscreen();
-        }
-        setIsFullscreen(true);
-      } else {
-        // Exit fullscreen with fallbacks
-        if (document.exitFullscreen) {
-          await document.exitFullscreen();
-        } else if ((document as any).webkitExitFullscreen) {
-          await (document as any).webkitExitFullscreen();
-        } else if ((document as any).mozCancelFullScreen) {
-          await (document as any).mozCancelFullScreen();
-        } else if ((document as any).msExitFullscreen) {
-          await (document as any).msExitFullscreen();
-        }
-        setIsFullscreen(false);
-      }
-    } catch (err) {
-      console.error('Error toggling fullscreen:', err);
-    }
-  }, []);
-
-  // Add fullscreen change event listener
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(
-        !!(document.fullscreenElement ||
-          (document as any).webkitFullscreenElement ||
-          (document as any).mozFullScreenElement ||
-          (document as any).msFullscreenElement)
-      );
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
-      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
-      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
-    };
-  }, []);
 
   // Add meta viewport tag for better mobile support
   useEffect(() => {
@@ -139,16 +78,13 @@ function App() {
         <button 
           className="calibrate-button"
           onClick={() => setShowCalibration(true)}
-        >
-          Calibrate
-        </button>
+          title="Calibrate"
+        />
         <button 
-          className="toggle-fullscreen-button"
-          onClick={toggleFullscreen}
-        >
-          {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
-        </button>
-        <button className="reset-button" onClick={handleReset}>Reset</button>
+          className="reset-button" 
+          onClick={handleReset}
+          title="Reset"
+        />
       </div>
       
       {showInstructions && (
