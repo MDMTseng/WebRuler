@@ -70,8 +70,8 @@ const MeasurementLines: React.FC<MeasurementLinesProps> = ({
     // Calculate the movement delta from the initial position
     const delta = currentMousePosition - initialDragInfo.mousePosition
     
-    // Apply 1/10th of the movement for finer control
-    const newPosition = initialDragInfo.position + (delta * 0.1)
+    // Apply 1/3th of the movement for finer control
+    const newPosition = initialDragInfo.position + (delta * 0.3)
 
     onLinesChange(
       lines.map(line =>
