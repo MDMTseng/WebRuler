@@ -155,14 +155,14 @@
 
 .measurement-line.horizontal {
   width: calc(100vw - 50px);
-  height: 10px;
+  height: 30px;
   transform: translateY(-5px);
   left: 0;
 }
 
 .measurement-line.vertical {
   height: calc(100vh - 50px);
-  width: 10px;
+  width: 30px;
   transform: translateX(-5px);
   top: 0;
 }
